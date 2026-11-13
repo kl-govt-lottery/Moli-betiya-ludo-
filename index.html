@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugnti Ludo Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #1e1e2f;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        h1 {
+            color: #ffd700;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #2b2b40;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            max-width: 450px;
+            width: 100%;
+        }
+
+        /* Ludo Board Styling */
+        .ludo-board {
+            width: 360px;
+            height: 360px;
+            background: #fff;
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(15, 1fr);
+            border: 3px solid #333;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .cell {
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Home Bases */
+        .base-red { grid-column: 1 / 7; grid-row: 1 / 7; background: #ff4d4d; display: flex; align-items: center; justify-content: center; }
+        .base-green { grid-column: 10 / 16; grid-row: 1 / 7; background: #2ecc71; display: flex; align-items: center; justify-content: center; }
+        .base-yellow { grid-column: 1 / 7; grid-row: 10 / 16; background: #f1c40f; display: flex; align-items: center; justify-content: center; }
+        .base-blue { grid-column: 10 / 16; grid-row: 10 / 16; background: #3498db; display: flex; align-items: center; justify-content: center; }
+
+        .home-inner {
+            width: 60%;
+            height: 60%;
+            background: #fff;
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 5px;
+            gap: 4px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Center Home */
+        .center-home {
+            grid-column: 7 / 10;
+            grid-row: 7 / 10;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 0.7rem;
+            border: 2px solid #333;
+        }
+
+        /* Paths */
+        .path-red { background: #ff4d4d; }
+        .path-green { background: #2ecc71; }
+        .path-yellow { background: #f1c40f; }
+        .path-blue { background: #3498db; }
+        .star { background: #fffacd; text-align: center; font-size: 10px; line-height: 24px; }
+
+        /* Tokens / Gotiyan */
+        .token {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .token-red { background: #cc0000; }
+        .token-green { background: #27ae60; }
+        .token-yellow { background: #d4ac0d; }
+        .token-blue { background: #2980b9; }
+
+        /* Controls & Dashboard */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .status-box {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #00ffcc;
+        }
+
+        .dice-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dice {
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            border: 2px solid #ffd700;
+        }
+
+        button {
+            background: #ffd700;
+            color: #1e1e2f;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background: #ffc107;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sugnti Ludo</h1>
+    <div class="game-container">
+        <!-- Ludo Board Layout -->
+        <div class="ludo-board">
+            <!-- Bases -->
+            <div class="base-red">
+                <div class="home-inner">
+                    <div class="token token-red" onclick="moveToken('red', 0)"></div>
+                    <div class="token token-red" onclick="moveToken('red', 1)"></div>
+                    <div class="token token-red" onclick="moveToken('red', 2)"></div>
+                    <div class="token token-red" onclick="moveToken('red', 3)"></div>
+                </div>
+            </div>
+            <div class="base-green">
+                <div class="home-inner">
+                    <div class="token token-green" onclick="moveToken('green', 0)"></div>
+                    <div class="token token-green" onclick="moveToken('green', 1)"></div>
+                    <div class="token token-green" onclick="moveToken('green', 2)"></div>
+                    <div class="token token-green" onclick="moveToken('green', 3)"></div>
+                </div>
+            </div>
+            <div class="center-home">SUGNTI</div>
+            <div class="base-yellow">
+                <div class="home-inner">
+                    <div class="token token-yellow" onclick="moveToken('yellow', 0)"></div>
+                    <div class="token token-yellow" onclick="moveToken('yellow', 1)"></div>
+                    <div class="token token-yellow" onclick="moveToken('yellow', 2)"></div>
+                    <div class="token token-yellow" onclick="moveToken('yellow', 3)"></div>
+                </div>
+            </div>
+            <div class="base-blue">
+                <div class="home-inner">
+                    <div class="token token-blue" onclick="moveToken('blue', 0)"></div>
+                    <div class="token token-blue" onclick="moveToken('blue', 1)"></div>
+                    <div class="token token-blue" onclick="moveToken('blue', 2)"></div>
+                    <div class="token token-blue" onclick="moveToken('blue', 3)"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls">
+            <div class="status-box" id="turnStatus">Red Player's Turn</div>
+            <div class="dice-section">
+                <div class="dice" id="diceValue">🎲</div>
+                <button onclick="rollDice()">Roll Dice</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTurn = 'red'; // red, green, yellow, blue
+        let lastRolledDice = 0;
+
+        function rollDice() {
+            // Random dice roll between 1 to 6
+            lastRolledDice = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('diceValue').innerText = lastRolledDice;
+            document.getElementById('turnStatus').innerText = `${currentTurn.toUpperCase()} rolled: ${lastRolledDice}. Click a token!`;
+        }
+
+        function moveToken(color, tokenIndex) {
+            if (color !== currentTurn) {
+                alert(`Pehle ${currentTurn.toUpperCase()} player ki baari hai!`);
+                return;
+            }
+
+            if (lastRolledDice === 0) {
+                alert('Pehle Dice Roll karein!');
+                return;
+            }
+
+            alert(`${color.toUpperCase()} player ne token #${tokenIndex + 1} ko ${lastRolledDice} steps chalaya!`);
+            
+            // Turn rotate karein (Simple 2-4 player flow)
+            const turns = ['red', 'green', 'yellow', 'blue'];
+            let nextIndex = (turns.indexOf(currentTurn) + 1) % turns.length;
+            currentTurn = turns[nextIndex];
+            
+            lastRolledDice = 0;
+            document.getElementById('diceValue').innerText = '🎲';
+            document.getElementById('turnStatus').innerText = `${currentTurn.toUpperCase()} Player's Turn`;
+        }
+    </script>
+</body>
+</html>
