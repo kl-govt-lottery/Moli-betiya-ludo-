@@ -1,253 +1,228 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kundan Ludo</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#091426;color:white;font-family:Arial,sans-serif;text-align:center}
-header{padding:15px;background:#101f38;border-bottom:2px solid #e6b638}
-h1{color:#ffce45;margin:5px}
-button,select{padding:12px;border:0;border-radius:9px;font-weight:bold;margin:5px}
-button{background:#ffca3a;color:#151515;cursor:pointer}
-button:disabled{opacity:.4}
-.panel{background:#14243c;margin:12px auto;padding:12px;border-radius:12px;max-width:520px}
-#board{width:min(94vw,520px);height:min(94vw,520px);margin:12px auto;background:#172b43;border:5px solid #d6ad48;border-radius:50%;position:relative;overflow:hidden}
-#track{position:absolute;inset:8%;border:2px dashed #71839a;border-radius:50%}
-.cell{position:absolute;width:5.8%;height:5.8%;border-radius:50%;background:#e7eaf0;border:1px solid #526174;transform:translate(-50%,-50%)}
-.token{position:absolute;width:9%;height:9%;border-radius:50%;border:3px solid white;transform:translate(-50%,-50%);z-index:5;font-size:12px;font-weight:bold;color:#111;cursor:pointer;box-shadow:0 2px 7px #000}
-.token.selected{outline:4px solid white;outline-offset:3px}
-.red{background:#ef4141}.green{background:#27bd70}.yellow{background:#ffd43b}.blue{background:#3989f5}
-.base{position:absolute;width:27%;height:27%;border-radius:18px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#111}
-#dice{font-size:48px;margin:5px}
-#status{font-size:17px;color:#ffdf73;min-height:24px}
-.small{font-size:12px;color:#c3d0e0}
-.hidden{display:none}
-#sound{background:#263d5c;color:white}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundan Ludo - Classic</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 5px;
+            color: #ffcc00;
+        }
+        #status {
+            font-size: 14px;
+            margin-bottom: 10px;
+            background: #222;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+        /* Game Board Container */
+        .ludo-board {
+            width: 360px;
+            height: 360px;
+            background: #fff;
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(15, 1fr);
+            border: 4px solid #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+        /* Base Homes */
+        .base-red { grid-column: 1 / 7; grid-row: 1 / 7; background: #e53935; border: 3px solid #b71c1c; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); padding: 15px; gap: 10px; }
+        .base-green { grid-column: 10 / 16; grid-row: 1 / 7; background: #43a047; border: 3px solid #1b5e20; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); padding: 15px; gap: 10px; }
+        .base-yellow { grid-column: 1 / 7; grid-row: 10 / 16; background: #fbc02d; border: 3px solid #f57f17; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); padding: 15px; gap: 10px; }
+        .base-blue { grid-column: 10 / 16; grid-row: 10 / 16; background: #1e88e5; border: 3px solid #0d47a1; display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); padding: 15px; gap: 10px; }
+
+        .home-box {
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .base-red .home-box { color: #e53935; }
+        .base-green .home-box { color: #43a047; }
+        .base-yellow .home-box { color: #fbc02d; }
+        .base-blue .home-box { color: #1e88e5; }
+
+        /* Center Home */
+        .center-home {
+            grid-column: 7 / 10;
+            grid-row: 7 / 10;
+            background: #ffeb3b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            font-size: 12px;
+            border: 2px solid #333;
+        }
+
+        /* Tracks / Cells */
+        .cell {
+            border: 1px solid #ccc;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+        }
+        .path-red { background: #ffcdd2; }
+        .path-green { background: #c8e6c9; }
+        .path-yellow { background: #fff9c4; }
+        .path-blue { background: #bbdefb; }
+        .safe-spot { background: #e0e0e0; }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            background: #ffcc00;
+            color: #121212;
+            border: none;
+            padding: 10px 18px;
+            font-weight: bold;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        #dice-display {
+            font-size: 24px;
+            background: #333;
+            padding: 5px 15px;
+            border-radius: 5px;
+            border: 1px solid #555;
+        }
+    </style>
 </head>
 <body>
-<header>
-<h1>🎲 KUNDAN LUDO</h1>
-<div class="small">Play • Enjoy • Win</div>
-</header>
 
-<div id="menu" class="panel">
-<h3>खेलने का तरीका चुनें</h3>
-<button onclick="startGame('computer',2)">🤖 Computer के साथ</button>
-<button onclick="startGame('friend',2)">👥 Friend के साथ (2 Player)</button>
-<button onclick="startGame('friend',4)">👥 Friend के साथ (4 Player)</button>
-<p class="small">Computer मोड में आपका मुकाबला कंप्यूटर से होगा। Friend मोड में सभी खिलाड़ी एक ही मोबाइल पर खेलेंगे।</p>
-</div>
+    <h1>🎲 Kundan Ludo Classic</h1>
+    <div id="status">पासा फेंकने के लिए बटन दबाएं!</div>
 
-<div id="game" class="hidden">
-<div class="panel">
-<div id="players"></div>
-<div id="status">पासा फेंकें</div>
-<div id="dice">🎲</div>
-<button id="roll" onclick="rollDice()">पासा फेंकें</button>
-<button id="sound" onclick="toggleSound()">🔊 Sound ON</button>
-<button onclick="restart()">Restart</button>
-<button onclick="goMenu()">Main Menu</button>
-</div>
+    <!-- 15x15 Classic Ludo Board Grid -->
+    <div class="ludo-board">
+        <!-- Bases -->
+        <div class="base-red">
+            <div class="home-box" onclick="moveToken('red', 0)">R1</div>
+            <div class="home-box" onclick="moveToken('red', 1)">R2</div>
+            <div class="home-box" onclick="moveToken('red', 2)">R3</div>
+            <div class="home-box" onclick="moveToken('red', 3)">R4</div>
+        </div>
+        <div class="base-green">
+            <div class="home-box" onclick="moveToken('green', 0)">G1</div>
+            <div class="home-box" onclick="moveToken('green', 1)">G2</div>
+            <div class="home-box" onclick="moveToken('green', 2)">G3</div>
+            <div class="home-box" onclick="moveToken('green', 3)">G4</div>
+        </div>
+        
+        <div class="center-home">KUNDAN</div>
 
-<div id="board">
-<div id="track"></div>
-<div class="base red" style="left:8%;top:8%">RED</div>
-<div class="base green" style="right:8%;top:8%">GREEN</div>
-<div class="base yellow" style="left:8%;bottom:8%">YELLOW</div>
-<div class="base blue" style="right:8%;bottom:8%">BLUE</div>
-<div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:23px;color:#ffcf48;font-weight:bold">K</div>
-</div>
-<div class="panel small">
-नियम: गोटी घर से केवल 6 आने पर निकलेगी। पासे के बाद गोटी पर क्लिक करें। 6 आने पर एक अतिरिक्त मौका मिलेगा।
-</div>
-</div>
+        <div class="base-yellow">
+            <div class="home-box" onclick="moveToken('yellow', 0)">Y1</div>
+            <div class="home-box" onclick="moveToken('yellow', 1)">Y2</div>
+            <div class="home-box" onclick="moveToken('yellow', 2)">Y3</div>
+            <div class="home-box" onclick="moveToken('yellow', 3)">Y4</div>
+        </div>
+        <div class="base-blue">
+            <div class="home-box" onclick="moveToken('blue', 0)">B1</div>
+            <div class="home-box" onclick="moveToken('blue', 1)">B2</div>
+            <div class="home-box" onclick="moveToken('blue', 2)">B3</div>
+            <div class="home-box" onclick="moveToken('blue', 3)">B4</div>
+        </div>
+    </div>
 
-<script>
-const colors=['red','green','yellow','blue'];
-const names=['लाल','हरा','पीला','नीला'];
-const emojis=['🔴','🟢','🟡','🔵'];
-let mode='friend', count=2, players=[], turn=0, dice=0;
-let rolled=false, sound=true, busy=false, gameOver=false;
-const safe=[0,8,13,21,26,34,39,47];
-const board=document.getElementById('board');
-const diceFaces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+    <!-- Action Controls -->
+    <div class="controls">
+        <button onclick="rollDice()">पासा फेंकें (Roll)</button>
+        <div id="dice-display">⚀</div>
+        <button onclick="resetGame()">Restart</button>
+    </div>
 
-function makeTrack(){
- const track=document.getElementById('track');
- for(let i=0;i<52;i++){
-  let a=(i/52)*Math.PI*2-Math.PI/2;
-  let x=50+43*Math.cos(a), y=50+43*Math.sin(a);
-  let c=document.createElement('div');
-  c.className='cell';
-  c.style.left=x+'%';c.style.top=y+'%';
-  track.appendChild(c);
- }
-}
-makeTrack();
+    <script>
+        let currentDice = 0;
+        let turn = 'red'; // red, green, yellow, blue
 
-function startGame(m,n){
- mode=m;count=n;turn=0;dice=0;rolled=false;gameOver=false;busy=false;
- players=Array.from({length:n},(_,i)=>({
-  color:colors[i],name: mode==='computer'&&i===1?'Computer':names[i],
-  tokens:[-1,-1,-1,-1]
- }));
- document.getElementById('menu').classList.add('hidden');
- document.getElementById('game').classList.remove('hidden');
- draw();status('खिलाड़ी '+players[turn].name+' की बारी है। पासा फेंकें।');
-}
-function status(t){document.getElementById('status').textContent=t}
-function current(){return players[turn]}
-function isComputer(){return mode==='computer'&&turn===1}
+        const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
 
-function coords(progress,player){
- const offset=player*13;
- if(progress<0){
-  const bases=[
-   [[16,16],[25,16],[16,25],[25,25]],
-   [[75,16],[84,16],[75,25],[84,25]],
-   [[16,75],[25,75],[16,84],[25,84]],
-   [[75,75],[84,75],[75,84],[84,84]]
-  ];
-  return bases[player][0];
- }
- if(progress<=50){
-  let i=(offset+progress)%52;
-  let a=(i/52)*Math.PI*2-Math.PI/2;
-  return [50+43*Math.cos(a),50+43*Math.sin(a)];
- }
- let a=(offset/52)*Math.PI*2-Math.PI/2;
- let r=43-(progress-50)*6.4;
- return [50+r*Math.cos(a),50+r*Math.sin(a)];
-}
-function draw(){
- document.getElementById('players').innerHTML=players.map((p,i)=>
-  `<span style="color:${p.color};font-weight:bold;margin:5px">${emojis[i]} ${p.name}${i===turn?' ◀':''}</span>`
- ).join('');
- document.querySelectorAll('.token').forEach(e=>e.remove());
- players.forEach((p,pi)=>p.tokens.forEach((v,ti)=>{
-  let [x,y]=coords(v,pi);
-  let el=document.createElement('button');
-  el.className='token '+p.color;
-  el.textContent=ti+1;
-  el.style.left=x+'%';el.style.top=y+'%';
-  if(pi===turn&&rolled&&!gameOver&&legal(pi,ti))el.classList.add('selected');
-  el.onclick=()=>moveToken(pi,ti);
-  board.appendChild(el);
- }));
-}
-function legal(pi,ti){
- let v=players[pi].tokens[ti];
- if(v===-1)return dice===6;
- if(v>=57)return false;
- return v+dice<=56;
-}
-function rollDice(){
- if(rolled||busy||gameOver||isComputer())return;
- doRoll(false);
-}
-function doRoll(computer){
- if(rolled||gameOver)return;
- dice=Math.floor(Math.random()*6)+1;
- document.getElementById('dice').textContent=diceFaces[dice-1];
- rolled=true;playSound(600+dice*80);
- let moves=current().tokens.map((v,i)=>legal(turn,i)?i:-1).filter(i=>i>=0);
- draw();
- if(!moves.length){
-  status('कोई चाल नहीं। '+(dice===6?'6 आया है, फिर से पासा फेंकें।':'अब अगली बारी।'));
-  setTimeout(()=>{
-   if(dice!==6)nextTurn();
-   else{rolled=false;status('6 आया है! दोबारा पासा फेंकें।');draw();if(isComputer())computerTurn();}
-  },900);
-  return;
- }
- status(dice===6?'6 आया! गोटी चुनें या घर से बाहर निकालें।':'अपनी गोटी पर क्लिक करके चलाएँ।');
- if(computer){
-  setTimeout(()=>computerMove(moves),700);
- }
-}
-function moveToken(pi,ti){
- if(gameOver||busy||!rolled||pi!==turn||isComputer())return;
- if(!legal(pi,ti)){status('यह गोटी नहीं चल सकती।');return}
- applyMove(pi,ti);
-}
-function applyMove(pi,ti){
- let p=players[pi],v=p.tokens[ti];
- if(v===-1)p.tokens[ti]=0;
- else p.tokens[ti]=v+dice;
- let newV=p.tokens[ti];
- let captured=false;
- if(newV>=0&&newV<=50){
-  let global=(pi*13+newV)%52;
-  if(!safe.includes(global)){
-   players.forEach((op,oi)=>{
-    if(oi===pi)return;
-    op.tokens=op.tokens.map(pos=>{
-     if(pos>=0&&pos<=50&&(oi*13+pos)%52===global){captured=true;return -1}
-     return pos;
-    });
-   });
-  }
- }
- playSound(captured?950:450);
- if(p.tokens.every(x=>x===56)){
-  gameOver=true;status('🎉 '+p.name+' जीत गए!');
-  alert('🎉 '+p.name+' जीत गए! Kundan Ludo');
-  return;
- }
- rolled=false;draw();
- if(captured)status('गोटी काट दी! एक और मौका।');
- else if(dice===6)status('6 आया! एक और मौका।');
- else status('चाल पूरी।');
- if(dice===6||captured){
-  if(isComputer())setTimeout(computerTurn,700);
-  else status(p.name+' को एक और मौका! पासा फेंकें।');
- }else nextTurn();
-}
-function nextTurn(){
- rolled=false;turn=(turn+1)%count;draw();
- status(players[turn].name+' की बारी। पासा फेंकें।');
- if(isComputer())setTimeout(computerTurn,700);
-}
-function computerTurn(){
- if(gameOver||!isComputer()||rolled)return;
- doRoll(true);
-}
-function computerMove(moves){
- if(gameOver)return;
- let choices=moves.slice().sort((a,b)=>{
-  let va=players[turn].tokens[a],vb=players[turn].tokens[b];
-  return vb-va;
- });
- let chosen=choices[0];
- applyMove(turn,chosen);
-}
-function restart(){
- if(confirm('क्या आप गेम दोबारा शुरू करना चाहते हैं?'))startGame(mode,count);
-}
-function goMenu(){
- document.getElementById('game').classList.add('hidden');
- document.getElementById('menu').classList.remove('hidden');
-}
-let audioCtx;
-function playSound(freq){
- if(!sound)return;
- try{
-  audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
-  let o=audioCtx.createOscillator(),g=audioCtx.createGain();
-  o.connect(g);g.connect(audioCtx.destination);
-  o.frequency.value=freq;g.gain.value=.07;
-  o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.16);
-  o.stop(audioCtx.currentTime+.17);
- }catch(e){}
-}
-function toggleSound(){
- sound=!sound;
- document.getElementById('sound').textContent=sound?'🔊 Sound ON':'🔇 Sound OFF';
-}
-</script>
+        function rollDice() {
+            currentDice = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('dice-display').innerText = diceFaces[currentDice - 1];
+            document.getElementById('status').innerText = `बारी: ${turn.toUpperCase()} | पासा आया: ${currentDice}. गोटी चुनें!`;
+        }
+
+        function moveToken(color, index) {
+            if (currentDice === 0) {
+                alert("पहले पासा फेंकें!");
+                return;
+            }
+            if (color !== turn) {
+                alert(`यह ${turn.toUpperCase()} की बारी है!`);
+                return;
+            }
+
+            if (currentDice === 6) {
+                alert(`${color.toUpperCase()} की गोटी घर से बाहर निकली!`);
+            } else {
+                alert(`चाल चली गई: ${currentDice} कदम`);
+            }
+
+            // बारी बदलना
+            if (currentDice !== 6) {
+                if (turn === 'red') turn = 'green';
+                else if (turn === 'green') turn = 'yellow';
+                else if (turn === 'yellow') turn = 'blue';
+                else turn = 'red';
+            } else {
+                alert("6 आया है! आपको एक और मौका मिला है।");
+            }
+
+            currentDice = 0;
+            document.getElementById('dice-display').innerText = '⚀';
+            document.getElementById('status').innerText = `अब बारी है: ${turn.toUpperCase()} की। पासा फेंकें।`;
+        }
+
+        function resetGame() {
+            turn = 'red';
+            currentDice = 0;
+            document.getElementById('dice-display').innerText = '⚀';
+            document.getElementById('status').innerText = 'गेम रीसेट हो गया। पासा फेंकें!';
+        }
+    </script>
+
 </body>
 </html>
