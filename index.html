@@ -3,408 +3,371 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kundan Ludo King</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kundan Ludo</title>
 <style>
+:root{--gold:#ffd34e;--navy:#07152f;--panel:#10264b}
 *{box-sizing:border-box}
-body{
- margin:0;
- background:linear-gradient(135deg,#06194b,#0755a5);
- color:white;
- font-family:Arial;
- text-align:center;
-}
-h1{color:#ffd54a;text-shadow:0 3px 5px black}
-.panel{max-width:720px;margin:auto;padding:10px}
-.toolbar,.status{
- background:#09285f;border:2px solid #e9b82e;
- border-radius:14px;padding:10px;margin:10px auto;
-}
-button,select{
- border:0;border-radius:10px;padding:10px;
- font-weight:bold;cursor:pointer;
-}
-.gold{background:linear-gradient(#ffe77b,#ffae00)}
-.bluebtn{background:#1476df;color:white}
-#board{
- width:min(94vw,590px);aspect-ratio:1;margin:12px auto;
- display:grid;grid-template-columns:repeat(15,1fr);
- grid-template-rows:repeat(15,1fr);
- background:white;border:5px solid #f5c542;
- border-radius:9px;overflow:hidden;
-}
-.cell{
- border:1px solid #c7c7c7;
- display:flex;align-items:center;
- justify-content:center;position:relative;
-}
-.base{
- grid-column:span 6;grid-row:span 6;
- margin:2px;border:2px solid white;
- border-radius:9px;display:grid;
- grid-template-columns:1fr 1fr;
- grid-template-rows:1fr 1fr;gap:5px;padding:7px;
-}
-.base.red{background:#e53935}
-.base.green{background:#18a84a}
-.base.yellow{background:#f4c51b}
-.base.blue{background:#1478e8}
-.yard{background:#ffffffd9;border-radius:7px}
-.track{background:#fff}
-.lane.red{background:#ef8d8b}
-.lane.green{background:#8be0a5}
-.lane.yellow{background:#ffe58a}
-.lane.blue{background:#8dc5ff}
-.start.red{background:#e53935}
-.start.green{background:#18a84a}
-.start.yellow{background:#f4c51b}
-.start.blue{background:#1478e8}
-.safe:after{content:"★";color:#777}
-.center{
- grid-column:7/10;grid-row:7/10;
- background:conic-gradient(#18a84a 0 25%,#f4c51b 25% 50%,#1478e8 50% 75%,#e53935 75%);
- display:flex;align-items:center;justify-content:center;
- font-size:25px;
-}
-.pawn{
- width:88%;height:88%;max-width:30px;
- max-height:30px;border-radius:50%;
- border:2px solid white;box-shadow:0 1px 4px #222;
- display:flex;align-items:center;justify-content:center;
- font-size:10px;color:white;padding:0;
-}
-.pawn.red{background:#d71920}
-.pawn.green{background:#078b35}
-.pawn.yellow{background:#d89d00}
-.pawn.blue{background:#075fc4}
-.pawn.legal{outline:3px solid #ffe44d}
-.players{
- display:grid;grid-template-columns:1fr 1fr;
- gap:7px;margin:8px auto;
-}
-.player{padding:8px;border:2px solid #ffffff55;border-radius:9px}
-.player.active{border-color:#ffe45c}
-#dice{font-size:54px}
-#message{color:#ffe879;font-weight:bold}
-.rules{
- text-align:left;background:#09285f;
- border-radius:12px;padding:12px;font-size:13px;
-}
+body{margin:0;background:radial-gradient(circle at 50% 15%,#173c72,#050d20 70%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+button{font:inherit;cursor:pointer;border:0}
+header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:#061329;border-bottom:1px solid #d8a92e}
+.brand{font-weight:1000;letter-spacing:1px;font-size:21px}.brand span{color:var(--gold)}
+.coins{color:#ffe18b;font-weight:800;background:#142e55;border:1px solid #a77b24;padding:7px 12px;border-radius:20px}
+main{width:min(100%,600px);margin:auto;padding:14px}
+.screen{display:none}.screen.active{display:block}
+.hero{text-align:center;padding:18px 10px 8px}
+.logo{font-size:clamp(35px,9vw,54px);font-weight:1000;letter-spacing:2px;text-shadow:0 4px 0 #8c4d00,0 0 18px #1d9cff}
+.logo b:nth-child(1){color:#ff4545}.logo b:nth-child(2){color:#ffe34e}.logo b:nth-child(3){color:#35dc80}.logo b:nth-child(4){color:#54b5ff}
+.sub{color:#c6d9f5;font-size:13px;margin-top:4px}
+.panel{background:linear-gradient(145deg,#102a54,#091a38);border:2px solid #e7b83c;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 10px 28px #0008}
+h2{font-size:18px;text-align:center;margin:0 0 14px;color:#ffe08a}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{background:#0b1b38;border:2px solid #526b91;border-radius:12px;padding:13px 8px;color:#fff;font-weight:800}
+.choice.selected{border-color:#ffd34e;background:#173b6d}
+.colors{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.colorpick{width:48px;height:48px;border-radius:50%;border:3px solid #ffffff66}
+.colorpick.selected{outline:3px solid var(--gold);outline-offset:3px}
+.primary{width:100%;padding:14px;border-radius:12px;background:linear-gradient(#ffe77b,#eaa600);color:#281700;font-weight:1000;font-size:17px;margin-top:15px}
+.secondary{padding:10px 14px;border-radius:10px;background:#17355e;color:#fff;border:1px solid #6683ad}
+.note{text-align:center;color:#b7c8e3;font-size:12px;line-height:1.5;margin-top:10px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.turn{font-weight:900;color:#ffe18a}
+.smallbtn{background:#17355e;color:#fff;border:1px solid #6683ad;border-radius:9px;padding:8px 10px}
+#boardWrap{background:#08142a;padding:7px;border-radius:15px;border:2px solid #d6a735}
+canvas{display:block;width:100%;height:auto;touch-action:manipulation}
+.controls{display:flex;align-items:center;justify-content:center;gap:14px;padding:13px 5px}
+.dice{width:64px;height:64px;border-radius:15px;background:linear-gradient(145deg,#fff,#dce7f7);color:#12213b;font-size:35px;font-weight:1000}
+.status{text-align:center;min-height:24px;color:#d9e8ff;font-size:14px;font-weight:700}
+.players{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}
+.playerpill{font-size:12px;border:1px solid #5d7190;background:#10264b;padding:6px 9px;border-radius:18px}
+.playerpill.active{border-color:#ffdc60;color:#ffdf77}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:20px;z-index:5}
+.modal.show{display:flex}
+.modalbox{width:min(100%,360px);background:#10264b;border:2px solid #ffd34e;border-radius:18px;padding:22px;text-align:center}
+@media(min-width:560px){main{padding:18px 22px}}
 </style>
 </head>
 <body>
-<h1>👑 KUNDAN LUDO KING 👑</h1>
-<p>Classic Ludo Game</p>
+
+<header>
+<div class="brand">♛ KUNDAN <span>LUDO</span></div>
+<div class="coins">🪙 2,550</div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+<div class="hero">
+<div class="logo"><b>K</b><b>U</b><b>N</b><b>D</b><b>A</b><b>N</b> LUDO</div>
+<div class="sub">Classic Board Game • Play With Friends</div>
+</div>
 
 <div class="panel">
-<div class="toolbar">
- Players:
- <select id="playerCount">
-  <option value="2">2 Players</option>
-  <option value="3">3 Players</option>
-  <option value="4" selected>4 Players</option>
- </select>
- <button class="gold" onclick="newGame()">New Game</button>
- <button class="bluebtn" onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+<h2>SELECT GAME MODE</h2>
+<div class="choices">
+<button class="choice selected" data-mode="2">👤 2 PLAYERS<br><small>You vs Computer</small></button>
+<button class="choice" data-mode="4">👥 4 PLAYERS<br><small>Local Friends</small></button>
 </div>
 
+<h2 style="margin-top:20px">SELECT YOUR TOKEN COLOR</h2>
+<div class="colors">
+<button class="colorpick selected" data-color="0" style="background:#ed3838"></button>
+<button class="colorpick" data-color="1" style="background:#16b95b"></button>
+<button class="colorpick" data-color="2" style="background:#f4c629"></button>
+<button class="colorpick" data-color="3" style="background:#248cf0"></button>
+</div>
+
+<button class="primary" id="play">▶ PLAY NOW</button>
+<div class="note">2 Players: You vs Computer · 4 Players: Local Friends<br>No Ads • No Sign-in</div>
+</div>
+
+<div class="panel">
+<h2>HOW TO PLAY</h2>
+<div class="note" style="text-align:left;font-size:13px">
+• 6 आने पर गोटी घर से बाहर आती है।<br>
+• अपनी सभी 4 गोटियों को Home पहुँचाएँ।<br>
+• Safe Zone पर गोटी नहीं कटती।<br>
+• विरोधी की गोटी काटने पर Extra Turn मिलता है।<br>
+• सभी 4 गोटियाँ Home पहुँचाने पर जीत होगी।
+</div>
+</div>
+</section>
+
+<section id="game" class="screen">
+<div class="topline">
+<button class="smallbtn" id="back">← MENU</button>
+<div class="turn" id="turnLabel">YOUR TURN</div>
+<button class="smallbtn" id="restart">↻ RESTART</button>
+</div>
 <div class="players" id="players"></div>
-<div id="board"></div>
-
-<div class="status">
- <div id="turn"></div>
- <div id="dice">🎲</div>
- <button class="gold" id="rollBtn" onclick="rollDice()">🎲 Roll Dice</button>
- <div id="message">गेम शुरू करें</div>
+<div id="boardWrap">
+<canvas id="board" width="600" height="600"></canvas>
 </div>
+<div class="controls">
+<button class="dice" id="dice">⚄</button>
+<div>
+<div class="status" id="status">Dice Roll करें</div>
+<div class="note">पहले Dice दबाएँ, फिर गोटी चुनें</div>
+</div>
+</div>
+</section>
+</main>
 
-<div class="rules">
-<b>गेम के नियम</b><br>
-• 6 आने पर गोटी बाहर निकलेगी।<br>
-• 6 आने पर अतिरिक्त चाल मिलेगी।<br>
-• लगातार 3 बार 6 आने पर चाल रद्द होगी।<br>
-• दूसरी गोटी काटने पर वह घर वापस जाएगी।<br>
-• सुरक्षित खाने पर गोटी नहीं कटेगी।<br>
-• चारों गोटियाँ घर पहुँचाने वाला जीतेगा।<br>
-• सही नंबर आने पर ही गोटी फिनिश होगी।
+<div class="modal" id="modal">
+<div class="modalbox">
+<h2 id="winTitle">🏆 YOU WIN!</h2>
+<p id="winText">शानदार खेल!</p>
+<button class="primary" id="again">PLAY AGAIN</button>
+<button class="secondary" id="menuBtn" style="margin-top:10px;width:100%">MAIN MENU</button>
 </div>
 </div>
 
 <script>
-const COLORS=['red','green','yellow','blue'];
-const NAMES={red:'Red',green:'Green',yellow:'Yellow',blue:'Blue'};
-const START={red:0,green:13,yellow:26,blue:39};
-const SAFE=[0,8,13,21,26,34,39,47];
-
-const PATH=[
-[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],
-[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],
-[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],
-[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],
-[7,0],[6,0]
+(()=>{
+const C=[
+{name:'Red',hex:'#ed3838',start:0,home:[[1,6],[3,6],[1,8],[3,8]],lane:[[7,1],[7,2],[7,3],[7,4],[7,5],[7,6]]},
+{name:'Green',hex:'#16b95b',start:13,home:[[9,1],[11,1],[9,3],[11,3]],lane:[[13,7],[12,7],[11,7],[10,7],[9,7],[8,7]]},
+{name:'Yellow',hex:'#f4c629',start:26,home:[[9,11],[11,11],[9,13],[11,13]],lane:[[7,13],[7,12],[7,11],[7,10],[7,9],[7,8]]},
+{name:'Blue',hex:'#248cf0',start:39,home:[[1,9],[3,9],[1,11],[3,11]],lane:[[1,7],[2,7],[3,7],[4,7],[5,7],[6,7]]}
 ];
 
-const LANES={
-red:[[7,1],[7,2],[7,3],[7,4],[7,5],[7,6]],
-green:[[1,7],[2,7],[3,7],[4,7],[5,7],[6,7]],
-yellow:[[7,13],[7,12],[7,11],[7,10],[7,9],[7,8]],
-blue:[[13,7],[12,7],[11,7],[10,7],[9,7],[8,7]]
+const track=[
+[6,1],[6,2],[6,3],[6,4],[6,5],[5,6],[4,6],[3,6],[2,6],[1,6],[0,6],[0,7],[0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[7,14],[8,14],[8,13],[8,12],[8,11],[8,10],[8,9],[9,8],[10,8],[11,8],[12,8],[13,8],[14,8],[14,7],[14,6],[13,6],[12,6],[11,6],[10,6],[9,6],[8,5],[8,4],[8,3],[8,2],[8,1],[8,0],[7,0],[6,0]
+];
+
+const safe=[0,8,13,21,26,34,39,47];
+const cv=document.getElementById('board');
+const ctx=cv.getContext('2d');
+let mode=2,chosen=0,players=[],turn=0,diceVal=0,rolled=false,gameOver=false,thinking=false;
+
+function newPlayers(){
+let ids=mode===2?[chosen,(chosen+2)%4]:[0,1,2,3];
+return ids.map((c,i)=>({c,name:mode===2?(i===0?'You':'Computer'):C[c].name,tokens:[-1,-1,-1,-1],done:0}));
+}
+
+function cell(x,y,size,fill,stroke='#8b9bb2'){
+ctx.fillStyle=fill;ctx.fillRect(x*size,y*size,size,size);
+ctx.strokeStyle=stroke;ctx.lineWidth=1.2;ctx.strokeRect(x*size,y*size,size,size);
+}
+
+function draw(){
+const s=40;
+ctx.clearRect(0,0,600,600);
+ctx.fillStyle='#f3f5f8';
+ctx.fillRect(0,0,600,600);
+
+const bases=[['#ed3838',0,0],['#16b95b',9,0],['#248cf0',0,9],['#f4c629',9,9]];
+bases.forEach(([col,x,y])=>{
+ctx.fillStyle=col;ctx.fillRect(x*s,y*s,6*s,6*s);
+ctx.fillStyle='#fff';ctx.fillRect((x+1)*s,(y+1)*s,4*s,4*s);
+for(let k=0;k<4;k++){
+let xx=x+1+(k%2)*2,yy=y+1+Math.floor(k/2)*2;
+ctx.beginPath();ctx.arc((xx+.5)*s,(yy+.5)*s,15,0,Math.PI*2);
+ctx.fillStyle=col;ctx.fill();ctx.strokeStyle='#7d8795';ctx.stroke();
+}
+});
+
+track.forEach(([x,y],i)=>{
+let fill=safe.includes(i)?'#d9e7f6':'#fff';
+cell(x,y,s,fill);
+if(safe.includes(i)){
+ctx.fillStyle='#8093ad';ctx.font='bold 19px sans-serif';
+ctx.textAlign='center';ctx.fillText('★',(x+.5)*s,(y+.68)*s);
+}
+});
+
+C.forEach(c=>{
+let [x,y]=track[c.start];
+ctx.fillStyle=c.hex;ctx.fillRect(x*s,y*s,s,s);
+ctx.strokeStyle='#fff';ctx.strokeRect(x*s,y*s,s,s);
+});
+
+C.forEach(c=>c.lane.forEach(([x,y])=>cell(x,y,s,c.hex,'#fff')));
+
+ctx.fillStyle='#ed3838';ctx.beginPath();ctx.moveTo(6*s,6*s);ctx.lineTo(9*s,6*s);ctx.lineTo(7.5*s,7.5*s);ctx.fill();
+ctx.fillStyle='#16b95b';ctx.beginPath();ctx.moveTo(9*s,6*s);ctx.lineTo(9*s,9*s);ctx.lineTo(7.5*s,7.5*s);ctx.fill();
+ctx.fillStyle='#f4c629';ctx.beginPath();ctx.moveTo(9*s,9*s);ctx.lineTo(6*s,9*s);ctx.lineTo(7.5*s,7.5*s);ctx.fill();
+ctx.fillStyle='#248cf0';ctx.beginPath();ctx.moveTo(6*s,9*s);ctx.lineTo(6*s,6*s);ctx.lineTo(7.5*s,7.5*s);ctx.fill();
+
+ctx.fillStyle='#1b2940';ctx.font='bold 12px sans-serif';
+ctx.textAlign='center';ctx.fillText('HOME',300,306);
+
+players.forEach((p,pi)=>p.tokens.forEach((prog,ti)=>{
+let pos;
+if(prog===-1){
+let [x,y]=C[p.c].home[ti];pos=[(x+.5)*s,(y+.5)*s];
+}else if(prog>=51){
+let [x,y]=C[p.c].lane[Math.min(5,prog-51)];pos=[(x+.5)*s,(y+.5)*s];
+}else{
+let idx=(C[p.c].start+prog)%52,[x,y]=track[idx];pos=[(x+.5)*s,(y+.5)*s];
+}
+let [x,y]=pos;
+let offset=players.length===2?0:((pi%2)*5+(ti%2)*-5);
+x+=offset;y+=offset;
+ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);
+ctx.fillStyle=C[p.c].hex;ctx.fill();
+ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.stroke();
+ctx.beginPath();ctx.arc(x-3,y-3,3,0,Math.PI*2);
+ctx.fillStyle='#fff9';ctx.fill();
+if(rolled&&pi===turn&&validMoves().includes(ti)){
+ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);
+ctx.strokeStyle='#111';ctx.lineWidth=2;ctx.stroke();
+}
+}));
+}
+
+function validMoves(){
+if(!rolled)return[];
+return players[turn].tokens.map((p,i)=>({p,i}))
+.filter(({p})=>p===-1?diceVal===6:p+diceVal<=56)
+.map(o=>o.i);
+}
+
+function renderPills(){
+document.getElementById('players').innerHTML=players.map((p,i)=>
+`<span class="playerpill ${i===turn?'active':''}">
+<span style="color:${C[p.c].hex}">●</span> ${p.name} · ${p.done}/4
+</span>`).join('');
+document.getElementById('turnLabel').textContent=players[turn].name.toUpperCase()+' TURN';
+}
+
+function status(t){document.getElementById('status').textContent=t;}
+
+function roll(){
+if(rolled||gameOver||thinking)return;
+diceVal=1+Math.floor(Math.random()*6);
+rolled=true;
+document.getElementById('dice').textContent=['','⚀','⚁','⚂','⚃','⚄','⚅'][diceVal];
+let moves=validMoves();
+draw();
+if(!moves.length){
+status(diceVal===6?'कोई चाल नहीं — फिर से Dice roll करें':'कोई चाल नहीं — अगली बारी');
+setTimeout(()=>{rolled=false;nextTurn(false)},850);
+}else status(diceVal===6?'6 आया! गोटी चुनें — Extra Turn':'चलने वाली गोटी चुनें');
+}
+
+function nextTurn(extra){
+rolled=false;diceVal=0;
+document.getElementById('dice').textContent='⚄';
+if(!extra)turn=(turn+1)%players.length;
+renderPills();draw();
+if(mode===2&&turn===1&&!gameOver){
+thinking=true;status('Computer की बारी…');
+setTimeout(computerPlay,700);
+}else{
+thinking=false;status(players[turn].name+' — Dice roll करें');
+}
+}
+
+function moveToken(ti){
+if(!rolled||!validMoves().includes(ti)||gameOver)return;
+let p=players[turn],old=p.tokens[ti];
+let next=old===-1?0:old+diceVal;
+p.tokens[ti]=next;
+let captured=false;
+
+if(next>=0&&next<=50){
+let idx=(C[p.c].start+next)%52;
+if(!safe.includes(idx)){
+players.forEach((other,oi)=>{
+if(oi===turn)return;
+other.tokens.forEach((op,ot)=>{
+if(op>=0&&op<=50&&(C[other.c].start+op)%52===idx){
+other.tokens[ot]=-1;captured=true;
+}
+});
+});
+}
+}
+
+if(next===56)p.done++;
+draw();
+
+if(p.done===4){
+gameOver=true;
+document.getElementById('winTitle').textContent=p.name==='You'?'🏆 YOU WIN!':'🏆 '+p.name.toUpperCase()+' WINS!';
+document.getElementById('winText').textContent='आपने शानदार खेल खेला।';
+document.getElementById('modal').classList.add('show');
+return;
+}
+
+let extra=diceVal===6||captured;
+status(captured?'विरोधी की गोटी कट गई! Extra Turn':next===56?'गोटी Home पहुँच गई!':extra?'6 आया! फिर से खेलें':'चाल पूरी');
+setTimeout(()=>nextTurn(extra),550);
+}
+
+function computerPlay(){
+if(gameOver)return;
+let d=1+Math.floor(Math.random()*6);
+diceVal=d;rolled=true;
+document.getElementById('dice').textContent=['','⚀','⚁','⚂','⚃','⚄','⚅'][d];
+let moves=validMoves();
+if(!moves.length){
+setTimeout(()=>{rolled=false;nextTurn(false)},700);
+return;
+}
+let ranked=moves.map(i=>{
+let pr=players[turn].tokens[i],dest=pr===-1?0:pr+d;
+let score=dest===56?1000:pr===-1?100:dest;
+return {i,score};
+}).sort((a,b)=>b.score-a.score);
+draw();
+setTimeout(()=>moveToken(ranked[0].i),650);
+}
+
+function clickBoard(e){
+if(!rolled||gameOver||thinking)return;
+let r=cv.getBoundingClientRect();
+let x=(e.clientX-r.left)*600/r.width;
+let y=(e.clientY-r.top)*600/r.height;
+let p=players[turn];
+let options=validMoves();
+let hit=options.map(i=>{
+let prog=p.tokens[i],pos;
+if(prog===-1){
+let [a,b]=C[p.c].home[i];pos=[(a+.5)*40,(b+.5)*40];
+}else if(prog>=51){
+let [a,b]=C[p.c].lane[Math.min(5,prog-51)];pos=[(a+.5)*40,(b+.5)*40];
+}else{
+let [a,b]=track[(C[p.c].start+prog)%52];pos=[(a+.5)*40,(b+.5)*40];
+}
+return {i,dist:Math.hypot(pos[0]-x,pos[1]-y)};
+}).filter(o=>o.dist<24).sort((a,b)=>a.dist-b.dist);
+if(hit.length)moveToken(hit[0].i);
+}
+
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{
+mode=+b.dataset.mode;
+document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('selected',x===b));
+});
+
+document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{
+chosen=+b.dataset.color;
+document.querySelectorAll('[data-color]').forEach(x=>x.classList.toggle('selected',x===b));
+});
+
+function start(){
+players=newPlayers();turn=0;rolled=false;diceVal=0;gameOver=false;thinking=false;
+document.getElementById('home').classList.remove('active');
+document.getElementById('game').classList.add('active');
+document.getElementById('modal').classList.remove('show');
+document.getElementById('dice').textContent='⚄';
+renderPills();draw();status('Dice roll करें');
+}
+
+document.getElementById('play').onclick=start;
+document.getElementById('dice').onclick=roll;
+cv.addEventListener('click',clickBoard);
+
+document.getElementById('back').onclick=()=>{
+document.getElementById('game').classList.remove('active');
+document.getElementById('home').classList.add('active');
+document.getElementById('modal').classList.remove('show');
 };
 
-let players=[],turn=0,dice=0,sixes=0;
-let rolled=false,gameOver=false,sound=true;
-
-const board=document.getElementById('board');
-
-function setupPlayers(){
- let count=+document.getElementById('playerCount').value;
- let order=count===2?['red','yellow']:
- count===3?['red','green','yellow']:COLORS;
- players=order.map(color=>({
- color,tokens:[-1,-1,-1,-1]
- }));
-}
-
-function idx(r,c){return r*15+c}
-
-function buildBoard(){
- board.innerHTML='';
- for(let i=0;i<225;i++){
-  let d=document.createElement('div');
-  d.className='cell';d.id='c'+i;
-  board.appendChild(d);
- }
-
- let bases={
- red:[0,0],green:[0,9],
- blue:[9,0],yellow:[9,9]
- };
-
- Object.entries(bases).forEach(([color,[r,c]])=>{
-  let base=document.createElement('div');
-  base.className='base '+color;
-  base.style.gridRow=(r+1)+' / span 6';
-  base.style.gridColumn=(c+1)+' / span 6';
-
-  for(let t=0;t<4;t++){
-   let y=document.createElement('div');
-   y.className='yard';
-   y.id='yard-'+color+'-'+t;
-   base.appendChild(y);
-  }
-  board.appendChild(base);
- });
-
- PATH.forEach(([r,c],i)=>{
-  let el=document.getElementById('c'+idx(r,c));
-  el.classList.add('track');
-  if(SAFE.includes(i))el.classList.add('safe');
- });
-
- Object.entries(LANES).forEach(([color,coords])=>{
-  coords.forEach(([r,c])=>{
-   document.getElementById('c'+idx(r,c))
-   .classList.add('lane',color);
-  });
- });
-
- Object.entries(START).forEach(([color,i])=>{
-  let [r,c]=PATH[i];
-  document.getElementById('c'+idx(r,c))
-  .classList.add('start',color);
- });
-
- let center=document.createElement('div');
- center.className='center';
- center.textContent='🏆';
- board.appendChild(center);
- drawTokens();
-}
-
-function drawTokens(){
- document.querySelectorAll('.pawn').forEach(e=>e.remove());
-
- players.forEach((p)=>{
-  p.tokens.forEach((pos,t)=>{
-   let b=document.createElement('button');
-   b.className='pawn '+p.color;
-   b.textContent=t+1;
-   b.onclick=()=>choosePawn(players.indexOf(p),t);
-
-   let target;
-   if(pos===-1){
-    target=document.getElementById('yard-'+p.color+'-'+t);
-   }else if(pos>=52){
-    let [r,c]=LANES[p.color][pos-52];
-    target=document.getElementById('c'+idx(r,c));
-   }else{
-    let [r,c]=PATH[(START[p.color]+pos)%52];
-    target=document.getElementById('c'+idx(r,c));
-   }
-   if(target)target.appendChild(b);
-  });
- });
- updatePlayers();
-}
-
-function updatePlayers(){
- let wrap=document.getElementById('players');
- wrap.innerHTML='';
- players.forEach((p,i)=>{
-  let d=document.createElement('div');
-  d.className='player '+(i===turn?'active':'');
-  d.innerHTML=NAMES[p.color]+' Player<br>🏠 '+
-  p.tokens.filter(x=>x===57).length+'/4 Home';
-  wrap.appendChild(d);
- });
- document.getElementById('turn').textContent=
- gameOver?'GAME OVER':NAMES[players[turn].color]+' Player की बारी';
-}
-
-function say(msg){
- document.getElementById('message').textContent=msg;
-}
-
-function toggleSound(){
- sound=!sound;
- document.getElementById('soundBtn').textContent=
- sound?'🔊 Sound ON':'🔇 Sound OFF';
-}
-
-function beep(){
- if(!sound)return;
- try{
-  let a=new AudioContext();
-  let o=a.createOscillator();
-  o.connect(a.destination);
-  o.start();o.stop(a.currentTime+.1);
- }catch(e){}
-}
-
-function legalMoves(){
- return players[turn].tokens.map((pos,i)=>({pos,i}))
- .filter(x=>x.pos!==57&&
- (x.pos===-1?dice===6:x.pos+dice<=57))
- .map(x=>x.i);
-}
-
-function rollDice(){
- if(gameOver||rolled)return;
-
- dice=Math.floor(Math.random()*6)+1;
- rolled=true;
- document.getElementById('dice').textContent=
- ['','⚀','⚁','⚂','⚃','⚄','⚅'][dice];
- document.getElementById('rollBtn').disabled=true;
- beep();
-
- if(dice===6)sixes++;else sixes=0;
-
- if(sixes===3){
-  say('तीन बार 6! आपकी चाल रद्द।');
-  nextTurn();return;
- }
-
- let moves=legalMoves();
-
- if(!moves.length){
-  say('कोई चाल उपलब्ध नहीं।');
-  if(dice===6){
-   rolled=false;
-   document.getElementById('rollBtn').disabled=false;
-  }else setTimeout(nextTurn,800);
-  return;
- }
-
- say(dice+' आया! अपनी गोटी चुनें।');
- moves.forEach(i=>{
-  let p=players[turn],pos=p.tokens[i],target;
-  if(pos===-1){
-   target=document.getElementById('yard-'+p.color+'-'+i);
-  }else{
-   let coords=pos>=52?LANES[p.color][pos-52]:
-   PATH[(START[p.color]+pos)%52];
-   target=document.getElementById('c'+idx(...coords));
-  }
-  let pawn=target?.querySelector('.pawn');
-  if(pawn)pawn.classList.add('legal');
- });
-}
-
-function choosePawn(pi,ti){
- if(gameOver||!rolled||pi!==turn)return;
-
- let p=players[turn],pos=p.tokens[ti];
-
- if(pos===57||(pos===-1&&dice!==6)||
- (pos!==-1&&pos+dice>57)){
-  say('यह गोटी नहीं चल सकती।');
-  return;
- }
-
- p.tokens[ti]=pos===-1?0:pos+dice;
- let captured=0;
-
- if(p.tokens[ti]>=0&&p.tokens[ti]<=50){
-  let abs=(START[p.color]+p.tokens[ti])%52;
-  if(!SAFE.includes(abs)){
-   players.forEach((op,oi)=>{
-    if(oi===turn)return;
-    op.tokens=op.tokens.map(other=>{
-     if(other>=0&&other<=50&&
-     (START[op.color]+other)%52===abs){
-      captured++;return -1;
-     }
-     return other;
-    });
-   });
-  }
- }
-
- drawTokens();beep();
-
- if(p.tokens.every(x=>x===57)){
-  gameOver=true;
-  say('🏆 '+NAMES[p.color]+' Player जीत गया!');
-  document.getElementById('rollBtn').disabled=true;
-  updatePlayers();return;
- }
-
- let msg=NAMES[p.color]+' ने गोटी '+(ti+1)+' चलाई।';
- if(p.tokens[ti]===57)msg+=' गोटी घर पहुँच गई!';
- if(captured)msg+=' '+captured+' गोटी काटी!';
-
- rolled=false;
-
- if(dice===6||captured||p.tokens[ti]===57){
-  say(msg+' एक और चाल मिलेगी।');
-  document.getElementById('rollBtn').disabled=false;
- }else{
-  say(msg);
-  setTimeout(nextTurn,700);
- }
-}
-
-function nextTurn(){
- rolled=false;dice=0;sixes=0;
- turn=(turn+1)%players.length;
- document.getElementById('dice').textContent='🎲';
- document.getElementById('rollBtn').disabled=false;
- drawTokens();
- say(NAMES[players[turn].color]+' Player की बारी।');
-}
-
-function newGame(){
- setupPlayers();
- turn=0;dice=0;sixes=0;
- rolled=false;gameOver=false;
- document.getElementById('dice').textContent='🎲';
- document.getElementById('rollBtn').disabled=false;
- buildBoard();
- say('नया गेम शुरू! Dice रोल करें।');
-}
-
-newGame();
+document.getElementById('restart').onclick=start;
+document.getElementById('again').onclick=start;
+document.getElementById('menuBtn').onclick=()=>document.getElementById('back').click();
+})();
 </script>
 </body>
 </html>
